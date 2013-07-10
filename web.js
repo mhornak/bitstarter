@@ -9,7 +9,7 @@ fs.readFileSync('./index.html', 'utf-8', function(err, content) {
 })
 
 app.get('/', function(request, response){
-    response.send(contents);
+    response.send("hello world not from file!");
 })
 
 var port = process.env.PORT || 5000;
