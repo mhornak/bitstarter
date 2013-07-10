@@ -5,7 +5,7 @@ var contents = "";
 
 fs.readFileSync('./index.html', 'utf-8', function(err, content) {
     if(err) throw err;
-    contents = conten.toString();
+    contents = content.toString();
 })
 
 app.get('/', function(request, response){
