@@ -2,10 +2,12 @@ var express = require('express');
 var fs = require('fs');
 var app = express.createServer(express.logger());
 
-var idx = new Buffer(fs.readFileSync("index.hmtl"));
+fs.readFileSync("index.html", "utf-8", function(err, data) {
+    if(err) throw err
+})
 
 app.get('/', function(request, response) {
-  response.send(idx.toString('utf-8'));
+  response.send(data.toString());
 });
 
 var port = process.env.PORT || 5000;
