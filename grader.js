@@ -39,6 +39,21 @@ var clone = function(fn) {
     return fn.bind({});
 };
 
+var callURL = function(callback) {
+    rest.get(program.url).on('complete', function(result) {
+	fs.writeFileSync(__dirname + '/graderurl.html', result);
+	program.file = 'graderurl.html';
+	callback();
+    });
+};
+
+var doTheWork = function() {
+    var checkJson = checkHtmlFile(program.file, program.checks);
+    var outJson = JSON.stringify(checkJson, null, 4);
+    console.log(outJson);
+};
+
+
 if(require.main == module) {
     program
 	.option('-c, --checks <check_file>', 'Path to checks.json' , clone(assertFileExists), CHECKSFILE_DEFAULT)
@@ -47,17 +62,9 @@ if(require.main == module) {
 	.parse(process.argv);
 
     if(program.url){
-	rest.get(program.url).on('complete', function(result) {
-	    fs.writeFileSync(__dirname + '/graderurl.html', result);
-	    program.file = 'graderurl.html';
-	    var checkJson = checkHtmlFile(program.file, program.checks);
-	    var outJson = JSON.stringify(checkJson, null, 4);
-	    console.log(outJson);
-	});
+	callURL(doTheWork);
     } else {
-	var checkJson = checkHtmlFile(program.file, program.checks);
-	var outJson = JSON.stringify(checkJson, null, 4);
-	console.log(outJson);
+	doTheWork();
     };
 } else {
     exports.checkHtmlFile = checkHtmlFile;
