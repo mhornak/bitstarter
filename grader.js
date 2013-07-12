@@ -48,15 +48,17 @@ if(require.main == module) {
 
     if(program.url){
 	rest.get(program.url).on('complete', function(result) {
-	    fs.writeFile(__dirname + '/graderurl.html', result, function(err) {
-		if (err) throw err;
-	    });
+	    fs.writeFileSync(__dirname + '/graderurl.html', result);
 	    program.file = 'graderurl.html';
+	    var checkJson = checkHtmlFile(program.file, program.checks);
+	    var outJson = JSON.stringify(checkJson, null, 4);
+	    console.log(outJson);
 	});
-    }
-    var checkJson = checkHtmlFile(program.file, program.checks);
-    var outJson = JSON.stringify(checkJson, null, 4);
-    console.log(outJson);
+    } else {
+	var checkJson = checkHtmlFile(program.file, program.checks);
+	var outJson = JSON.stringify(checkJson, null, 4);
+	console.log(outJson);
+    };
 } else {
     exports.checkHtmlFile = checkHtmlFile;
 };
